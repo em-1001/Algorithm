@@ -5,7 +5,7 @@
 
 using namespace std;
 
-int cnt = 0;
+int rk = 0;
 
 int main()
 {
@@ -13,6 +13,8 @@ int main()
     vector<pair<int, int>> cord;
     
     cin >> n; 
+    
+    int* list = new int[n];
     
     for (int i=0; i<n; i++){
         cin >> c;
@@ -26,22 +28,18 @@ int main()
     );
     
     int pv = cord[0].second;
-    cord[0].second = 0;
+    list[0] = rk;
     for (size_t i=1; i<cord.size(); i++){   
-        if (cord[i].second != pv) cnt++;
+        if (cord[i].second != pv) rk++;
         pv = cord[i].second;
-        cord[i].second = cnt;
+        list[cord[i].first] = rk;
     }
     
-    sort(cord.begin(), cord.end(), 
-        [](const auto& a, const auto& b){
-            return a.first < b.first;
-        }
-    );
-    
-    for (const auto& [index, value] : cord){
-        cout << value << " ";
+    for (int i=0; i<n; i++){
+        cout << list[i] << " ";
     }
+    
+    delete[] list;
     
     return 0;
 }
