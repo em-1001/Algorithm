@@ -34,7 +34,6 @@ bool cross(pll a, pll b, pll c, pll d){
     }
     
     return ct1<=0 && ct2<=0;
-    
 }
 
 int main()
