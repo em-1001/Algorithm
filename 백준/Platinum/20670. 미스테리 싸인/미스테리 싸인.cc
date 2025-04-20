@@ -45,7 +45,7 @@ bool on_line(pll a, pll b, pll p){
     return !ccw(p2v(a, b), p2v(b, p)) && a<=p && p<=b;
 }
 
-int bin_search(vector<pll> P, int L, int R, pll point){
+int bin_search(vector<pll>& P, int L, int R, pll point){
     if(L+1 == R) return L;
     int M = (L + R) / 2;
     if(ccw(p2v(P[0], P[M]), p2v(P[0], point)) > 0){
@@ -61,17 +61,10 @@ bool Point_In_Convex(vector<pll>& P, pll S){
     || ccw(p2v(P[0], P[P.size()-1]), p2v(P[0], S))>0){ 
         return 0;
     } 
-    //int idx = bin_search(P, 1, P.size()-1, S);
-    int L=1, R=P.size()-1;
-    while(L+1 != R){
-        int M = (L + R) / 2;
-        if(ccw(p2v(P[0], P[M]), p2v(P[0], S)) > 0) L = M;
-        else R = M;
-    }
-    if(ccw(p2v(P[L], S), p2v(S, P[L+1]))>0) return 0;
+    int idx = bin_search(P, 1, P.size()-1, S);
+    if(ccw(p2v(P[idx], S), p2v(S, P[idx+1]))>0) return 0;
     else return 1;
 }
-
 
 int main()
 {
@@ -101,10 +94,3 @@ int main()
 
     return 0;
 }
-
-
-
-
-
-
-
