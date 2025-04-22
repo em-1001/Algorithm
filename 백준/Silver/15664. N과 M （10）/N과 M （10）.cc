@@ -1,0 +1,52 @@
+#include <iostream>
+#include <vector>
+#include <algorithm>
+
+using namespace std;
+
+int n, m, max_num=-1;
+vector<int> v, g;
+int spent[8] = {0, };
+
+bool promising(int idx, int visited){
+    if(!spent[idx] && v[idx]!=visited && v[idx] >= max_num){
+        return 1;
+    }
+    return 0;
+}
+
+void backtrack(int rank){
+    int visited = -1;
+    if(rank==m){
+        for(int i=0; i<g.size(); i++){
+            cout << g[i] << " ";
+        }
+        cout << "\n";
+        return;
+    }
+    for(int i=0; i<n; i++){
+        if(promising(i, visited)){
+            spent[i] = 1;
+            g.push_back(v[i]);
+            visited = v[i];
+            max_num = v[i];
+            backtrack(rank+1);
+            spent[i] = 0;
+            g.pop_back();
+            max_num = v[i];
+        }
+    }
+}
+
+int main(){
+    int k;
+    cin >> n >> m;
+    for(int i=0; i<n; i++){
+        cin >> k;
+        v.push_back(k);
+    }
+    sort(v.begin(), v.end());
+    
+    backtrack(0);
+    return 0;
+}
