@@ -7,15 +7,15 @@ int main()
 {
     int n; 
     char a;
-    long long hash=0;
+    long long hash=0, r=1;
     cin >> n;
     for(int i=0; i<n; i++){
         cin >> a;
-        hash += (int(a) - 96) * pow(31, i); 
+        hash += ((long(a)-96)*r)%1234567891;
+        r = (r*31)%1234567891; 
     }
-    hash = hash % 1234567891;
    
-    cout << int(hash);
+    cout << hash%1234567891;
 
     return 0;
 }
