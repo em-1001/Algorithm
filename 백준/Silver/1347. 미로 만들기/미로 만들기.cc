@@ -61,7 +61,6 @@ int main()
         track[ry[i]][rx[i]] = 1;
     }
     
-    bool flag=1;
     for(int i=0; i<=max_y; i++){
         for(int j=0; j<=max_x; j++){
             if(track[i][j]) cout << '.';
