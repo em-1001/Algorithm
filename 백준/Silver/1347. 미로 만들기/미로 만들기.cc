@@ -14,6 +14,7 @@ string map;
 
 int rx[51] = {0, };
 int ry[51] = {0, };
+bool track[51][51] = {0,};
 int cx=0, cy=0;
 int F_cnt = 0;
 int max_x=0, min_x=0, max_y=0, min_y=0;
@@ -56,22 +57,18 @@ int main()
         }
         max_y -= min_y;
     }
+    for(int i=0; i<=F_cnt; i++){
+        track[ry[i]][rx[i]] = 1;
+    }
     
     bool flag=1;
     for(int i=0; i<=max_y; i++){
         for(int j=0; j<=max_x; j++){
-            for(int k=0; k<=F_cnt; k++){
-                if(rx[k]==j && ry[k]==i){
-                    cout << '.';
-                    flag=0;
-                    break;
-                }
-            }
-            if(flag) cout << '#';
-            flag=1;
+            if(track[i][j]) cout << '.';
+            else cout << '#';
         }
         cout << '\n';
     }
-    
+	
     return 0;
 }
