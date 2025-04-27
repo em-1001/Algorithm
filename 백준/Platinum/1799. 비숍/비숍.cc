@@ -7,7 +7,7 @@ using namespace std;
 int board[10][10] = {0,};
 int l[20] = {0,};
 int r[20] = {0,};
-int n, cnt=0, max_bishop=0;
+int n, black_cnt=0, white_cnt=0, cnt=0;
 
 
 bool promising(int x, int y, int rank){
@@ -15,9 +15,9 @@ bool promising(int x, int y, int rank){
     return 0;
 }
 
-void backtrack(int rank){
-    if(rank == 2*n){
-        if(cnt > max_bishop) max_bishop = cnt;
+void black_backtrack(int rank){
+    if(rank > 2*n-1){
+        if(cnt > black_cnt) black_cnt = cnt;
         return;
     }
     
@@ -34,13 +34,41 @@ void backtrack(int rank){
             cnt++;
             l[rank]=1;
             r[n-(x-y)]=1;
-            backtrack(rank+1);
+            black_backtrack(rank+2);
             cnt--;
             l[rank]=0;
             r[n-(x-y)]=0;
         }
     }
-    if(!flag) backtrack(rank+1);
+    if(!flag) black_backtrack(rank+2);
+}
+
+void white_backtrack(int rank){
+    if(rank > 2*n-1){
+        if(cnt > white_cnt) white_cnt = cnt;
+        return;
+    }
+    
+    int x, y;
+    bool flag=0;
+    int lim = (rank>n) ? 2*n-rank : rank;
+    int begin = (rank>n) ? (rank-n+1)*n-1 : rank-1;
+    for(int j=0; j<lim; j++){
+        int idx = begin + (n-1)*j;
+        y = idx/n;
+        x = idx%n;
+        if(promising(x, y, rank)){
+            flag=1;
+            cnt++;
+            l[rank]=1;
+            r[n-(x-y)]=1;
+            white_backtrack(rank+2);
+            cnt--;
+            l[rank]=0;
+            r[n-(x-y)]=0;
+        }
+    }
+    if(!flag) white_backtrack(rank+2);
 }
 
 int main()
@@ -54,8 +82,10 @@ int main()
             cin >> board[i][j];
         }
     }
-    backtrack(1);
-    cout << max_bishop;
+    black_backtrack(1);
+    cnt=0;
+    white_backtrack(2);
+    cout << black_cnt+white_cnt;
 
     return 0;
 }
