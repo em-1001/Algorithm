@@ -110,11 +110,11 @@ int main()
             // doubly linked
             if(j+1<m && map[i][j+1]!='#'){
                 AddLine((i*m+j)*2+1, (i*m+j+1)*2, inf); //v [out] -> w [in] 
-                AddLine((i*m+j+1)*2+1, (i*m+j)*2, inf); //w [in] -> v [out]
+                AddLine((i*m+j+1)*2+1, (i*m+j)*2, inf); //w [out] -> v [in]
             }
             if(i+1<n && map[i+1][j]!='#'){
                 AddLine((i*m+j)*2+1, ((i+1)*m+j)*2, inf); //v [out] -> w [in]
-                AddLine(((i+1)*m+j)*2+1, (i*m+j)*2, inf); //w [in] -> v [out]
+                AddLine(((i+1)*m+j)*2+1, (i*m+j)*2, inf); //w [out] -> v [in]
             }
         }
     }
