@@ -1,24 +1,33 @@
 #include <iostream>
 #include <vector>
-#include <algorithm>
 
 using namespace std;
-vector<int> v;
+
+vector<int> arr; 
+
+void merge(int s, int e){
+    if(s==e) return; 
+    int m=s+e>>1;
+    merge(s, m); 
+    merge(m+1, e); 
+    vector<int> tmp;
+    for(int i=s,j=m+1,k=0;k<=e-s;k++){
+        if(j>e || (i<=m && arr[i]<arr[j])) tmp.push_back(arr[i++]);
+        else tmp.push_back(arr[j++]);
+    }
+    for(int i=0; i<=e-s; i++) arr[s+i]=tmp[i];
+    return; 
+}
 
 int main()
 {
-    ios::sync_with_stdio(0);
-    cin.tie(0), cout.tie(0);
-    int n, k;
-    cin >> n;
+    int n, a; 
+    cin >> n; 
     for(int i=0; i<n; i++){
-        cin >> k;
-        v.push_back(k);
+        cin >> a; 
+        arr.push_back(a);
     }
-    sort(v.begin(), v.end());
-    for(int i=0; i<n; i++){
-        cout << v[i] << endl;
-    }
- 
+    merge(0, n-1);
+    for(int i=0; i<arr.size(); i++) cout << arr[i] << "\n";
     return 0;
 }
