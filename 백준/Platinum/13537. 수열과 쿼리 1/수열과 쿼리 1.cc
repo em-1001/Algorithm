@@ -38,15 +38,12 @@ int main()
     cin.tie(0);
     cout.tie(0);
     memset(arr, 0, sizeof(arr));
-    int cnt=0;
     int n, q, a, b;
     long c;
     cin >> n;
     for(int i=1; i<=n; i++){
         cin >> arr[i];
     }
-    //while(n=n>>1) cnt++;
-    //n=pow(2, cnt+1);
     cin >> q; 
     init(1,1,n);
     for(int i=0; i<q; i++){
