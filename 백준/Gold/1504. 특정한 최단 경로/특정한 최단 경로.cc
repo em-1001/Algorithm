@@ -36,7 +36,7 @@ int main()
     ios_base::sync_with_stdio(0);
     cin.tie(0);
     cout.tie(0);
-    long ans1=0, ans2=0; 
+    long v1s, v1v2, v1e, v2s, v2e, ans1=0, ans2=0; 
     int n, e, v1, v2; 
     int a, b, c; 
     
@@ -52,36 +52,30 @@ int main()
     
     cin >> v1 >> v2; 
     
-    dijkstra(1);
-    ans1+=dist[v1]; 
-    for(int i=1; i<=n; i++) dist[i]=inf; 
-    dijkstra(v1);
-    ans1+=dist[v2]; 
-    for(int i=1; i<=n; i++) dist[i]=inf; 
-    dijkstra(v2); 
-    ans1+=dist[n]; 
-    for(int i=1; i<=n; i++) dist[i]=inf;  
-    
-    dijkstra(1);
-    ans2+=dist[v2]; 
-    for(int i=1; i<=n; i++) dist[i]=inf;  
-    dijkstra(v2);
-    ans2+=dist[v1]; 
-    for(int i=1; i<=n; i++) dist[i]=inf; 
     dijkstra(v1); 
-    ans2+=dist[n]; 
-    for(int i=1; i<=n; i++) dist[i]=inf;         
-
-    if(v2==n){
-        if(ans1>=inf){
+    v1s=dist[1]; 
+    v1e=dist[n];
+    v1v2=dist[v2]; 
+    
+    for(int i=1; i<=n; i++) dist[i]=inf; 
+    dijkstra(v2);
+    v2s=dist[1]; 
+    v2e=dist[n];
+    
+    long ans=0;
+    
+    if(v2e==0){
+        ans=v1s+v1v2+v2e;
+        if(ans>=inf){
             cout << -1; 
-            return 0;
+            return 0; 
         }
-        cout << ans1; 
+        cout << ans; 
         return 0; 
     }
     
-    long ans=min(ans1, ans2); 
+    ans = min(v1s+v1v2+v2e, v2s+v1v2+v1e);
+    
     if(ans>=inf){
         cout << -1;
         return 0; 
