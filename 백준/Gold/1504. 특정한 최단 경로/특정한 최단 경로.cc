@@ -3,7 +3,6 @@
 #include <queue>
 #include <cmath>
 #include <algorithm>
-#include <limits.h>
 
 using namespace std; 
 
@@ -63,16 +62,6 @@ int main()
     v2e=dist[n];
     
     long ans=0;
-    
-    if(v2e==0){
-        ans=v1s+v1v2+v2e;
-        if(ans>=inf){
-            cout << -1; 
-            return 0; 
-        }
-        cout << ans; 
-        return 0; 
-    }
     
     ans = min(v1s+v1v2+v2e, v2s+v1v2+v1e);
     
