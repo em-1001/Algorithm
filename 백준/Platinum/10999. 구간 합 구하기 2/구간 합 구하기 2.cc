@@ -28,8 +28,6 @@ long update(int node, int s, int e, int i, int j, long v){
         return tree[node]; //node값 리턴 
     }
     int m=s+e>>1; 
-    //cout << node << endl; 
-    //cout << s << " " << e << " " << i << " " << j << endl; 
     return tree[node]=update(node*2,s,m,i,j,v)+update(node*2+1,m+1,e,i,j,v); 
 }
 
@@ -54,7 +52,6 @@ int main()
         if(a==1){
             cin >> d; 
             update(1,1,n,b,c,d);
-            //for(int i=1; i<=10; i++) cout << tree[i] << " ";
             m--;
         }
         else{
