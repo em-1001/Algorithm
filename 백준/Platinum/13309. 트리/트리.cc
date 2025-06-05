@@ -72,6 +72,9 @@ void query(int i, int j, bool k){
 
 int main()
 {
+    ios_base::sync_with_stdio(0);
+    cin.tie(0);
+    cout.tie(0);
     int q, a, b, c, d; 
     cin >> n >> q; 
     grp.resize(n+1); 
