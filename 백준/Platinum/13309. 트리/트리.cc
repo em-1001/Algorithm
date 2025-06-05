@@ -1,95 +1,107 @@
-#include <iostream>
-#include <vector> 
+#include <bits/stdc++.h>
 
-using namespace std; 
+using namespace std;
+const int MAX_N = 200001;
+int n, q;
+int sz[MAX_N], dep[MAX_N], par[MAX_N], top[MAX_N], in[MAX_N], out[MAX_N];
 
-int n, wei[200001], num[200001], dep[200001], top[200001], par[200001], ord=0; 
-int tree[800001]={0,}; 
-vector<vector<int>> grp; 
+struct SegmentTree {
+    bool tree[MAX_N * 2];
 
-int seg_sum(int node, int s, int e, int i, int j){
-    if(s>j || e<i) return 0;
-    if(i<=s && e<=j) return tree[node]; 
-    int m=s+e>>1; 
-    return seg_sum(node*2,s,m,i,j)+seg_sum(node*2+1,m+1,e,i,j);
-}
+    void update(int p, bool val) {
+        for (tree[p += n] = val; p > 1; p >>= 1) tree[p >> 1] = tree[p] | tree[p ^ 1];
+    }
 
-int seg_update(int node, int s, int e, int i, int v){
-    if(i<s || i>e) return tree[node]; 
-    if(s==e) return tree[node]=v;
-    int m=s+e>>1; 
-    return tree[node]=seg_update(node*2,s,m,i,v)+seg_update(node*2+1,m+1,e,i,v);
-}
+    bool query(int l, int r) {
+        bool ret = false;
+        for (l += n, r += n; l < r; l >>= 1, r >>= 1) {
+            if (l & 1) ret |= tree[l++];
+            if (r & 1) ret |= tree[--r];
+        }
+        return ret;
+    }
 
-void dfs1(int cur){
-    wei[cur]=1; 
-    for(auto &i:grp[cur]){
-        if(i==par[cur]) continue; 
-        dep[i]=dep[cur]+1; 
-        par[i]=cur; 
-        dfs1(i); 
-        wei[cur]+=wei[i]; 
-        if(grp[cur][0]==par[cur] || wei[grp[cur][0]]<wei[i]) swap(grp[cur][0], i); 
+} seg;
+
+vector<int> t[MAX_N];
+
+void dfs1(int here = 1) {
+    sz[here] = 1;
+    for (auto &there: t[here]) {
+        dep[there] = dep[here] + 1;
+        par[there] = here;
+        dfs1(there);
+        sz[here] += sz[there];
+        if (sz[there] > sz[t[here][0]]) swap(there, t[here][0]);
     }
 }
 
-void dfs2(int cur){
-    num[cur]=++ord; 
-    for(auto &i:grp[cur]){
-        if(i==par[cur]) continue; 
-        top[i]=i==grp[cur][0]?top[cur]:i;
-        dfs2(i); 
+int counter;
+
+void dfs2(int here = 1) {
+    in[here] = ++counter;
+    for (auto there: t[here]) {
+        top[there] = there == t[here][0] ? top[here] : there;
+        dfs2(there);
     }
+    out[here] = counter;
 }
 
-void HLD(int root){
-    dfs1(root); 
-    top[1]=1; 
-    dfs2(root); 
+bool query(int a, int b) {
+    bool ret = false;
+    while (top[a] != top[b]) {
+        if (dep[top[a]] < dep[top[b]]) swap(a, b);
+        int st = top[a];
+        ret |= seg.query(in[st], in[a] + 1);
+        a = par[st];
+    }
+    if (a == b) return ret;
+    if (dep[a] > dep[b]) swap(a, b);
+    ret |= seg.query(in[a] + 1, in[b] + 1);
+
+    return ret;
 }
 
-void query(int i, int j, bool k){
-    int res=0; 
-    int mem_i=i, mem_j=j; 
-    while(top[i]!=top[j]){
-        if(dep[top[i]]<dep[top[j]]) swap(i, j); 
-        res+=seg_sum(1,1,n,num[top[i]]+1,num[i]);
-        i=par[top[i]]; 
-    }
-    if(num[i]>num[j]) swap(i,j); 
-    res+=seg_sum(1,1,n,num[i]+1,num[j]); 
-    
-    if(res==0){
-        cout << "YES" << "\n";
-        if(k) seg_update(1,1,n,num[mem_i],-1);
-    }
-    else{
-        cout << "NO" << "\n"; 
-        if(k) seg_update(1,1,n,num[mem_j],-1);
-    }
+void update(int a) {
+    seg.update(in[a], true);
 }
 
+int main() {
+    ios_base::sync_with_stdio(false);
+    cin.tie(NULL);
+    cout.tie(NULL);
+    cin >> n >> q;
 
-int main()
-{
-    ios_base::sync_with_stdio(0);
-    cin.tie(0);
-    cout.tie(0);
-    int q, a, b, c, d; 
-    cin >> n >> q; 
-    grp.resize(n+1); 
-    for(int i=2; i<=n; i++){
-        cin >> a; 
-        grp[i].push_back(a); 
-        grp[a].push_back(i); 
+    for (int i = 2; i <= n; ++i) {
+        int a;
+        cin >> a;
+        t[a].push_back(i);
+    }
+    dfs1();
+    dfs2();
+
+
+    for (int i = 0; i < q; ++i) {
+        int b, c, d;
+        cin >> b >> c >> d;
+        if (d == 0) {
+            if (!query(b, c)) {
+                cout << "YES" << '\n';
+            } else {
+                cout << "NO" << '\n';
+            }
+
+        } else {
+            if (!query(b, c)) {
+                cout << "YES" << '\n';
+                update(b);
+            } else {
+                cout << "NO" << '\n';
+                update(c);
+            }
+
+        }
     }
 
-    HLD(1); 
-    
-    for(int i=0; i<q; i++){
-        cin >> b >> c >> d; 
-        query(b,c,d); 
-    }
-    
-    return 0;
+
 }
