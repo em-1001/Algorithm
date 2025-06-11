@@ -77,33 +77,20 @@ int solve(int c){
     for(int i=0; i<m; i++){
         cord=bfs2cus(cord); 
         if(cord==-1) return -1; 
-        //cout << "cord: " << cord/n+1 << " " << cord%n+1 << endl; 
         memset(visited, 0, sizeof(visited)); 
         int idx=map[cord/n][cord%n]-2;
         map[cord/n][cord%n]=0; 
         fuel-=to_cus;
-        //cout << fuel << endl; 
         if(fuel<0) return -1; 
         to_cus=0; 
         cord=bfs2targ(cord, idx);
-        /*
-        for(int i=0; i<n; i++){
-            for(int j=0; j<n; j++){
-                cout << visited[i][j] << " ";
-            }
-            cout << endl; 
-        }*/
         if(cord==-1) return -1; 
-        //cout << "cord: " << cord/n+1 << " " << cord%n+1 << endl; 
         memset(visited, 0, sizeof(visited)); 
         fuel-=to_targ;
-        //cout << fuel << endl; 
         if(fuel<0) return -1; 
         fuel+=to_targ*2; 
-        //cout << fuel << endl; 
         to_targ=0; 
         remain--; 
-        //cout << endl; 
     }
     return fuel; 
 }
